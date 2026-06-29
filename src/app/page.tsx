@@ -1,97 +1,43 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 export default function HomePage() {
+  const [user, setUser] = useState<User | null>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+  }, []);
+
   return (
-    <div
-      style={{
-        backgroundColor: "#FFFFFF",
-        fontFamily: "Inter, sans-serif",
-      }}
-    >
+    <div style={{ backgroundColor: "#FFFFFF", fontFamily: "Inter, sans-serif" }}>
       <Navigation />
 
-      {/* Hero Section */}
       <section style={{ padding: "clamp(24px, 5vw, 48px) clamp(20px, 5.5vw, 80px) 0", maxWidth: 1280, margin: "0 auto" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 40, maxWidth: 844 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <h1
-              style={{
-                fontFamily: "Inter, sans-serif",
-                fontWeight: 700,
-                fontSize: "clamp(36px, 6vw, 64px)",
-                letterSpacing: "-0.02em",
-                color: "#000000",
-                margin: 0,
-                lineHeight: 1.1,
-              }}
-            >
+            <h1 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: "clamp(36px, 6vw, 64px)", letterSpacing: "-0.02em", color: "#000000", margin: 0, lineHeight: 1.1 }}>
               味蕾漫游
             </h1>
-            <p
-              style={{
-                fontFamily: "Inter, sans-serif",
-                fontWeight: 400,
-                fontSize: "clamp(18px, 2.5vw, 24px)",
-                lineHeight: "1.5em",
-                color: "rgba(0, 0, 0, 0.75)",
-                margin: 0,
-              }}
-            >
+            <p style={{ fontFamily: "Inter, sans-serif", fontWeight: 400, fontSize: "clamp(18px, 2.5vw, 24px)", lineHeight: "1.5em", color: "rgba(0, 0, 0, 0.75)", margin: 0 }}>
               探索世界各地的极致美味，从街头小吃到米其林餐桌，每一道菜都是一段旅程。用舌尖感受食材的温度，用味蕾记录生活的美好。
             </p>
           </div>
-          <a
-            href="/article"
-            style={{
-              fontFamily: "Inter, sans-serif",
-              fontWeight: 500,
-              fontSize: "clamp(18px, 2.5vw, 24px)",
-              lineHeight: "1.5em",
-              color: "#FFFFFF",
-              backgroundColor: "#000000",
-              borderRadius: 8,
-              padding: "clamp(14px, 2vw, 20px) clamp(24px, 3vw, 32px)",
-              width: "fit-content",
-              textDecoration: "none",
-              display: "inline-block",
-              boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)",
-            }}
-          >
-            开始探索
-          </a>
+          <a href="/article" style={{ fontFamily: "Inter, sans-serif", fontWeight: 500, fontSize: "clamp(18px, 2.5vw, 24px)", lineHeight: "1.5em", color: "#FFFFFF", backgroundColor: "#000000", borderRadius: 8, padding: "clamp(14px, 2vw, 20px) clamp(24px, 3vw, 32px)", width: "fit-content", textDecoration: "none", display: "inline-block", boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)" }}>开始探索</a>
         </div>
       </section>
 
-      {/* Hero Image */}
       <section style={{ padding: "clamp(24px, 5vw, 48px) clamp(20px, 5.5vw, 80px) 0", maxWidth: 1280, margin: "0 auto" }}>
-        <img
-          src="/images/hero-image.png"
-          alt="丰盛的国际美食盛宴"
-          style={{
-            width: "100%",
-            height: "auto",
-            display: "block",
-            borderRadius: 8,
-          }}
-        />
+        <img src="/images/hero-image.png" alt="丰盛的国际美食盛宴" style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }} />
       </section>
 
-      {/* Section 1: Three Cards */}
       <section style={{ padding: "clamp(40px, 8vw, 80px) clamp(20px, 5.5vw, 80px) 0", maxWidth: 1280, margin: "0 auto" }}>
-        <h2
-          style={{
-            fontFamily: "Inter, sans-serif",
-            fontWeight: 600,
-            fontSize: "clamp(28px, 5vw, 48px)",
-            letterSpacing: "-0.02em",
-            color: "#000000",
-            margin: "0 0 clamp(24px, 4vw, 48px) 0",
-            lineHeight: 1.1,
-          }}
-        >
-          本月精选
-        </h2>
+        <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "clamp(28px, 5vw, 48px)", letterSpacing: "-0.02em", color: "#000000", margin: "0 0 clamp(24px, 4vw, 48px) 0", lineHeight: 1.1 }}>本月精选</h2>
         <div style={{ display: "flex", gap: 32, flexWrap: "wrap" }}>
           {[
             { img: "/images/card-food-1.png", title: "意式提拉米苏", body: "马斯卡彭奶酪与浓缩咖啡的完美邂逅，层层叠叠的绵密口感，每一口都是意大利的浪漫。可可粉的微苦与奶油的甜美在舌尖交织。" },
@@ -100,11 +46,7 @@ export default function HomePage() {
           ].map((card, i) => (
             <div key={i} style={{ flex: "1 1 280px", minWidth: 250, display: "flex", flexDirection: "column", gap: 24 }}>
               <div style={{ width: "100%", borderRadius: 8, overflow: "hidden" }}>
-                <img
-                  src={card.img}
-                  alt={card.title}
-                  style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
-                />
+                <img src={card.img} alt={card.title} style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }} />
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 500, fontSize: "clamp(20px, 2.5vw, 24px)", lineHeight: "1.5em", color: "#000000", margin: 0 }}>{card.title}</h3>
@@ -115,7 +57,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section 2: Text + Image */}
       <section style={{ padding: "clamp(40px, 8vw, 80px) clamp(20px, 5.5vw, 80px) 0", maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "flex-start", gap: "clamp(24px, 6vw, 80px)", flexWrap: "wrap" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 48, flex: "1 1 400px", minWidth: 280, maxWidth: 516, paddingTop: 48 }}>
           <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "clamp(28px, 5vw, 48px)", letterSpacing: "-0.02em", color: "#000000", margin: 0, lineHeight: 1.1 }}>烹饪哲学</h2>
@@ -141,7 +82,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section 3: Two Dishes */}
       <section style={{ padding: "clamp(40px, 8vw, 80px) clamp(20px, 5.5vw, 80px) 0", maxWidth: 1280, margin: "0 auto" }}>
         <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "clamp(28px, 5vw, 48px)", letterSpacing: "-0.02em", color: "#000000", margin: "0 0 clamp(24px, 4vw, 48px) 0", lineHeight: 1.1 }}>招牌之选</h2>
         <div style={{ display: "flex", gap: 31, flexWrap: "wrap" }}>
@@ -162,7 +102,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section 4: Testimonials */}
       <section style={{ padding: "clamp(40px, 8vw, 80px) clamp(20px, 5.5vw, 80px) 0", maxWidth: 1280, margin: "0 auto" }}>
         <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "clamp(28px, 5vw, 48px)", letterSpacing: "-0.02em", color: "#000000", margin: "0 0 clamp(24px, 4vw, 48px) 0", lineHeight: 1.1 }}>食客口碑</h2>
         <div style={{ display: "flex", gap: 32, flexWrap: "wrap" }}>
@@ -187,7 +126,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section style={{ marginTop: "clamp(40px, 8vw, 80px)", backgroundColor: "#F7F7F7", padding: "clamp(40px, 8vw, 89px) clamp(20px, 5.5vw, 80px)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
         <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "clamp(28px, 5vw, 48px)", letterSpacing: "-0.02em", color: "#000000", margin: 0, lineHeight: 1.1 }}>开启你的美食之旅</h2>
         <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>

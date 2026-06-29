@@ -1,19 +1,16 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 
+// Minimal callback — exchange happens client-side to avoid server-side ws dependency
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/dashboard";
+  const requestUrl = new URL(request.url);
+  const code = requestUrl.searchParams.get("code");
 
+  // Redirect to dashboard, code exchange handled by Supabase client-side
   if (code) {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
-    }
+    return NextResponse.redirect(
+      new URL(`/dashboard?code=${code}`, request.url)
+    );
   }
 
-  // Return to login page on error
-  return NextResponse.redirect(`${origin}/login?error=auth_callback_error`);
+  return NextResponse.redirect(new URL("/login", request.url));
 }

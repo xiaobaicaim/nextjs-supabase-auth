@@ -1,9 +1,10 @@
-// Must be the FIRST import — polyfills WebSocket before Supabase loads
-import "@/lib/polyfill-ws";
+import { NextResponse, type NextRequest } from "next/server";
 
-import { updateSession } from "@/lib/supabase/middleware";
-
-export const proxy = updateSession;
+// Simple proxy with NO Supabase imports — avoids WebSocket/Node.js 18 issues on EdgeOne
+export function proxy(request: NextRequest) {
+  // Auth is handled client-side, middleware just passes through
+  return NextResponse.next({ request });
+}
 
 export const config = {
   matcher: [
